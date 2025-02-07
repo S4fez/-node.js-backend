@@ -35,18 +35,6 @@ router.get('/productdetail/:productid', (req, res) => {
     });
 });
 
-// router.get('/productstore/:productsizeid', (req, res) => {
-//     console.log("productsize_id = ",req.params.productsizeid)
-//     pool.query('SELECT * FROM product_store where productsize_id = ' + req.params.productsizeid +'', (err, result) => {
-//         if (err) {
-//             console.error('Error executing query', err.stack);
-//             res.status(500).send('Error executing query');
-//         } else {
-//             res.json(result.rows);
-//         }
-//     });
-// });ใใใใใใใใใ
-
 
 router.get('/productbrand/:brandid/', (req, res) => {
     console.log('SELECT * FROM productdetail where product_id = ',req.params.productid + '')
@@ -244,15 +232,7 @@ router.post('/register', async (req, res) => {
             }
             }
             
-    //   const result = await pool.query(
-    //     'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id',
-    //     [username, email, hashPassword]
-    //   );
-            //ตอบกลับเมื่อลงทะเบียนสำเร็จ
-        //    return res.status(201).json({ 
-        //         message: 'User registered successfully',    
-        //         userId: newUser.rows[0].id 
-        //     });
+
     } catch (error) {
             res.status(500).json({ 
                 message: 'Error registering user', 
