@@ -157,7 +157,7 @@ router.post('/productstore/paybucket', (req, res) => {
 
 
 router.post('/login', async(req, res ) => {
-    //นำยูสเซอเนม
+    
     const account=pool.query(`SELECT * FROM account where username_hash = '${req.body.username}' `,
                 (err, result) =>{
                if (err) {
