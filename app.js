@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const express = require('express');
 const routes = require('./routes');
+const searchproduct = require('./searchproduct');
 
 const app = express();
 const jwt = require('jsonwebtoken');
@@ -45,15 +46,18 @@ pool.connect()
     process.exit(1); 
   });
 function verifyToken(req, res, next) {
-    console.log(req.path)
+    const authHeader = req.headers.authorization;
+    // console.log(req.path)
     if (req.path === '/login' || req.path === '/register') {
         return next();
     }
     // Get the token from the Authorization header
-    
+    if (!authHeader) {
+        return res.status(403).json({ message: 'No token provided.' });
+    }
     const token = req.headers.authorization.split(' ')[1];
     const secret = process.env.JWT_SECRET
-    console.log('token',token)
+    // console.log('token',token)
     if (!token) {
       return res.status(403).send({ message: 'No token provided.' });
     }
@@ -77,4 +81,5 @@ function verifyToken(req, res, next) {
     });
   }
 
-app.use('/api',verifyToken, routes);
+app.use('/api',verifyToken, routes,);
+app.use('/api', searchproduct);
