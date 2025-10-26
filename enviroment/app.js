@@ -1,11 +1,12 @@
 // app.js
 const { Pool } = require('pg');
-const dbConfig = require('./dbconfig'); // นำเข้าการตั้งค่าฐานข้อมูล
+const dbConfig = require('../enviroment//dbconfig'); // นำเข้าการตั้งค่าฐานข้อมูล
 const cors = require('cors');
 
 const express = require('express');
-const routes = require('./routes');
-const searchproduct = require('./searchproduct');
+const routes = require('../api-controller/routes');
+const searchproduct = require('../api-controller/searchproduct');
+const userdetail = require('../api-controller/userdetail');
 
 const app = express();
 const jwt = require('jsonwebtoken');
@@ -14,9 +15,10 @@ require('dotenv').config();
 
 app.use(express.json());
 app.use(cors());
+// ให้ Express เสิร์ฟไฟล์จากโฟลเดอร์ /uploads
+app.use('/uploads', express.static('uploads'));
 // Use the routes defined in the routes module
 
-// Start the server
 // Start the server
 const PORT = 3000;
 
@@ -83,3 +85,4 @@ function verifyToken(req, res, next) {
 
 app.use('/api',verifyToken, routes,);
 app.use('/api', searchproduct);
+app.use('/api',userdetail);

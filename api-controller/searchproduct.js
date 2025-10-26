@@ -4,7 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
-const dbConfig = require('./dbconfig');
+const dbConfig = require('../enviroment/dbconfig');
 const bcrypt  = require('bcrypt');
 const jwt = require('jsonwebtoken');
 

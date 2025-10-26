@@ -4,9 +4,10 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
-const dbConfig = require('./dbconfig');
+const dbConfig = require('../enviroment/dbconfig');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const e = require('express');
 
 const pool = new Pool(dbConfig);
 
@@ -192,7 +193,7 @@ router.post('/login', async (req, res) => {
                         const token = jwt.sign({ userId: result.rows[0].user_id, username: result.rows[0].username_hash }, process.env.JWT_SECRET, {
                             expiresIn: '10h', // Token expires in 10 hour
                         });
-                        return res.json({ token });
+                        return res.json({ token, userId: result.rows[0].account_id , email: result.rows[0].email});
 
 
                     } else {
