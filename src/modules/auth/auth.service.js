@@ -20,8 +20,18 @@ const login = async (username, password) => {
     throw new AppError('Invalid username or password', 401);
   }
 
-  const token = signToken({ userId: account.user_id, username: account.username_hash });
-  return { token, userId: account.account_id, email: account.email };
+  const token = signToken({
+    userId: account.user_id,
+    username: account.username_hash,
+    sys_role: account.sys_role,
+  });
+
+  return {
+    token,
+    userId: account.account_id,
+    email: account.email,
+    sys_role: account.sys_role,
+  };
 };
 
 const register = async (usernamehash, passwordhash, email) => {
