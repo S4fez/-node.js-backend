@@ -5,6 +5,7 @@
   "main": "databasepg.js",
   "scripts": {
     "start": "node enviroment/app.js",
+    "dev": "nodemon enviroment/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

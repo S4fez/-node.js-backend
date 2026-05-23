@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
 const dbConfig = require('../enviroment/dbconfig.js');
-const bcrypt  = require('bcrypt');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
@@ -49,21 +49,21 @@ router.post('/uploads', upload.single('image'), async (req, res) => {
 });
 
 router.post('/userprofile', async (req, res) => {
-    const userId = req.body.userId; // สมมติว่า userId ถูกตั้งค่าใน middleware การตรวจสอบโทเค็น
-    // console.log('userId',userId);
-    try {
-        const result = await pool.query(
-            'SELECT address,account_id,name,surname,user_age,user_img,user_birthdate FROM account_detail WHERE account_id = $1',
-            [userId]
-        );  
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        const user = new UserProfile(result.rows[0]);   
-        res.json(user);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+  const userId = req.body.userId; // สมมติว่า userId ถูกตั้งค่าใน middleware การตรวจสอบโทเค็น
+  // console.log('userId',userId);
+  try {
+    const result = await pool.query(
+      'SELECT address,account_id,name,surname,user_age,user_img,user_birthdate,email,role_name,sys_name,role_id,sys_role FROM V_USER_DETAIL WHERE account_id = $1',
+      [userId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
     }
+    const user = new UserProfile(result.rows[0]);
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 
