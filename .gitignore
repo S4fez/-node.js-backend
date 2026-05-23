@@ -1,1 +1,6 @@
 .env
+node_modules/
+logs/
+src/database/backups/
+architec-design.md
+.claude/

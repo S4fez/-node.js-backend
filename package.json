@@ -4,8 +4,8 @@
   "description": "",
   "main": "databasepg.js",
   "scripts": {
-    "start": "node enviroment/app.js",
-    "dev": "nodemon enviroment/app.js",
+    "start": "node src/server.js",
+    "start:legacy": "node enviroment/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,6 +18,8 @@
     "express": "^4.18.3",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^5.0.0"
   }
 }
