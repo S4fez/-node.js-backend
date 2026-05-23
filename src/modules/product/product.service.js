@@ -92,6 +92,71 @@ const searchProducts = async (name) => {
   return result.rows;
 };
 
+// ─── Admin Functions ───────────────────────────────────────────────────────────
+
+const getAllBrands = async () => {
+  const result = await pool.query('SELECT * FROM productbrand ORDER BY brand_id ASC');
+  return result.rows;
+};
+
+const getAllProductsAdmin = async () => {
+  const result = await pool.query(
+    `SELECT pd.*, pb.namebrand
+     FROM productdetail pd
+     LEFT JOIN productbrand pb ON pd.brand_id = pb.brand_id
+     ORDER BY pd.product_id DESC`
+  );
+  return result.rows;
+};
+
+const createProduct = async ({ brand_id, nameproduct, price, img, sizes }) => {
+  const result = await pool.query(
+    `INSERT INTO productdetail (brand_id, nameproduct, price, img, record_status)
+     VALUES ($1, $2, $3, $4, 'A') RETURNING product_id`,
+    [brand_id, nameproduct, price, img]
+  );
+  const productId = result.rows[0].product_id;
+
+  if (sizes && sizes.length > 0) {
+    for (const s of sizes) {
+      await pool.query(
+        `INSERT INTO productstore (product_id, size, stock_size) VALUES ($1, $2, $3)`,
+        [productId, s.size, s.stock]
+      );
+    }
+  }
+
+  return { product_id: productId, message: 'เพิ่มสินค้าสำเร็จ' };
+};
+
+const updateProduct = async (productId, { nameproduct, price, img, record_status }) => {
+  const fields = [];
+  const values = [];
+  let idx = 1;
+
+  if (nameproduct !== undefined) { fields.push(`nameproduct = $${idx++}`); values.push(nameproduct); }
+  if (price !== undefined) { fields.push(`price = $${idx++}`); values.push(price); }
+  if (img !== undefined) { fields.push(`img = $${idx++}`); values.push(img); }
+  if (record_status !== undefined) { fields.push(`record_status = $${idx++}`); values.push(record_status); }
+
+  if (fields.length === 0) return { message: 'ไม่มีข้อมูลที่ต้องอัปเดต' };
+
+  values.push(productId);
+  await pool.query(
+    `UPDATE productdetail SET ${fields.join(', ')} WHERE product_id = $${idx}`,
+    values
+  );
+  return { message: 'อัปเดตสินค้าสำเร็จ' };
+};
+
+const deleteProduct = async (productId) => {
+  await pool.query(
+    `UPDATE productdetail SET record_status = 'D' WHERE product_id = $1`,
+    [productId]
+  );
+  return { message: 'ลบสินค้าสำเร็จ' };
+};
+
 module.exports = {
   getBasketballProducts,
   getProductById,
@@ -100,4 +165,9 @@ module.exports = {
   getCartItems,
   processPayment,
   searchProducts,
+  getAllBrands,
+  getAllProductsAdmin,
+  createProduct,
+  updateProduct,
+  deleteProduct,
 };
